@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import "boostrap/dist/css/boostrap.min.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
 import AddChampion from "./components/add-champion.component";
@@ -34,7 +34,7 @@ class App extends Component {
           <Switch>
             <Route exact path={["/", "/champions"]} component={ChampionsList} />
             <Route exact path="/add" component={AddChampion} />
-            <Route exact path="/champions/:id" component={Champion}/>
+            <Route exact path="/champions/:id" component={Champion} />
           </Switch>
         </div>
       </Router>

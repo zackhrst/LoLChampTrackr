@@ -56,13 +56,26 @@ export const deleteChampion = (id) => async (dispatch) => {
         await ChampionDataService.delete(id);
 
         dispatch({
+            type: DELETE_CHAMPION,
+            payload: { id },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const deleteAllChampions = () => async (dispatch) => {
+    try {
+        const res = await ChampionDataService.deleteAll();
+
+        dispatch({
             type: DELETE_ALL_CHAMPIONS,
             payload: res.data,
-        });
+        });    
 
         return Promise.resolve(res.data);
     }   catch (err) {
-        return Promise.resolve(err);
+        return Promise.reject(err);
     }
 };
 
