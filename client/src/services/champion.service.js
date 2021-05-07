@@ -25,7 +25,7 @@ class ChampionDataService {
         return http.delete(`/champions`);
     }
 
-    findByTitle(title) {
+    findByName(name) {
         return http.get(`/champions?name=${name}`);
     }
 }

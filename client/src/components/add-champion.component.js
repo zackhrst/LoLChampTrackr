@@ -81,6 +81,19 @@ class AddChampion extends Component {
                             <input
                                 type="text"
                                 className="form-control"
+                                id="name"
+                                required
+                                value={this.state.name}
+                                onChange={this.onChangeName}
+                                name="name"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="description">Description</label>
+                            <input
+                                type="text"
+                                className="form-control"
                                 id="description"
                                 required
                                 value={this.state.description}
