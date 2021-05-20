@@ -1,3 +1,7 @@
+Simple REACT app demonstrating CRUD. Uses PostgreSQL.
+Allows you to build a League of Legends Champion list, add a description, edit, and delete all in reeal-time without refrshing your browser.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
