@@ -10,8 +10,8 @@ class Champion extends Component {
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.getChampion = this.getChampion.bind(this);
-        this.updateStatus = this.updateStatus.bind(this);
-        this.updateContent = this.updateContent.bind(this);
+        this.updateOwned = this.updateOwned.bind(this);
+        this.updateChampion = this.updateChampion.bind(this);
         this.removeChampion = this.removeChampion.bind(this);
 
         this.state = {
@@ -66,7 +66,7 @@ class Champion extends Component {
             });
     }
 
-    updateStatus(status) {
+    updateOwned(status) {
         var data = {
             id: this.state.currentChampion.id,
             name: this.state.currentChampion.name,
@@ -74,47 +74,46 @@ class Champion extends Component {
             owned: status,
         };
 
-        this.props
-            .updateChampion(this.state.currentChampion.id, data)
-            .then((response) => {
-                console.log(response);
-
-                this.setState((prevState) => ({
+        ChampionDataService.update(this.state.currentChampion.id, data)
+            .then(response => {
+                this.setState(prevState => ({
                     currentChampion: {
                         ...prevState.currentChampion,
-                        owned: status,
-                    },
+                        owned: status
+                    }
                 }));
-
-                this.setState({ message: "The status was updated successfully!" });
+                console.log(response.data);
             })
-            .catch((e) => {
+            .catch(e => {
                 console.log(e);
             });
     }
 
-    updateContent() {
-        this.props
-            .updateChampion(this.state.currentChampion.id, this.state.currentChampion)
-            .then((response) => {
-                console.log(response);
-
-                this.setState({ message: "The Champion was updated successfully!" });
+    updateChampion() {
+        ChampionDataService.update(
+            this.state.currentChampion.id,
+            this.state.currentChampion
+        )
+            .then(response => {
+                console.log(response.data);
+                this.setState({
+                    message: "The Champion was updated successfully!"
+                });
             })
-            .catch((e) => {
+            .catch(e => {
                 console.log(e);
             });
     }
-
+      
     removeChampion() {
-        this.props
-            .deleteChampion(this.state.currentChampion.id)
-            .then(() => {
-                this.props.history.push("/champions");
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        ChampionDataService.delete(this.state.currentChampion.id)
+        .then(response => {
+            console.log(response.data);
+            this.props.history.push('/champions')
+        })
+        .catch(e => {
+            console.log(e);
+        });
     }
 
     render() {
@@ -131,7 +130,7 @@ class Champion extends Component {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="title"
+                                    id="name"
                                     value={currentChampion.name}
                                     onChange={this.onChangeName}
                                 />
@@ -158,14 +157,14 @@ class Champion extends Component {
                         {currentChampion.owned ? (
                             <button
                                 className="badge badge-primary mr-2"
-                                onClick={() => this.updateStatus(false)}
+                                onClick={() => this.updateOwned(false)}
                             >
                                 Not Owned
                             </button>
                         ) : (
                             <button
                                 className="badge badge-primary mr-2"
-                                onClick={this.updateStatus(true)}
+                                onClick={() => this.updateOwned(true)}
                             >
                                 Owned
                             </button>
@@ -181,7 +180,7 @@ class Champion extends Component {
                         <button
                             type="submit"
                             className="badge badge-success"
-                            onClick={this.updateContent}
+                            onClick={this.updateChampion}
                         >
                             Update
                         </button>
