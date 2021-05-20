@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ChampionDataService from "../services/champion.service";
 import { connect } from "react-redux";
 import { retrieveChampions, findChampionsByName, deleteAllChampions } from "../actions/champions";
 import { Link } from "react-router-dom";
@@ -7,12 +8,14 @@ class ChampionsList extends Component {
     constructor(props) {
         super(props);
         this.onChangeSearchName = this.onChangeSearchName.bind(this);
+        this.retrieveChampions = this.retrieveChampions.bind(this);
         this.refreshData = this.refreshData.bind(this);
         this.setActiveChampion = this.setActiveChampion.bind(this);
-        this.findByName = this.findByName.bind(this);
+        this.searchName = this.searchName.bind(this);
         this.removeAllChampions = this.removeAllChampions.bind(this);
 
         this.state = {
+            champions: [],
             currentChampion: null, 
             currentIndex: -1,
             searchName: "",
@@ -31,7 +34,21 @@ class ChampionsList extends Component {
         });
     }
 
+    retrieveChampions() {
+        ChampionDataService.getAll()
+            .then(response => {
+                this.setState({
+                    champions: response.data
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
     refreshData() {
+        this.retrieveChampions();
         this.setState({
             currentChampion: null,
             currentIndex: -1,
@@ -46,21 +63,32 @@ class ChampionsList extends Component {
     }
 
     removeAllChampions() {
-        this.props
-            .deleteAllChampions()
-            .then((response) => {
-                console.log(response);
+        ChampionDataService.deleteAll()
+            .then(response => {
+                console.log(response.data);
                 this.refreshData();
             })
-            .catch((e) => {
+            .catch(e => {
                 console.log(e);
             });
     }
+        
+    searchName() {
+        this.setState({
+            currentChampion: null,
+            currentIndex: -1
+        });
 
-    findByName() {
-        this.refreshData();
-
-        this.props.findChampionsByName(this.state.searchName);        
+        ChampionDataService.findByName(this.state.searchName)
+            .then(response => {
+                this.setState({
+                    champions: response.data
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     render() {
